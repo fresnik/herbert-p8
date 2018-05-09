@@ -22,11 +22,13 @@ function _init()
   menuitem(2, "toggle sound", toggle_sound)
   
   data = cartdata("fresnik_herbert_1")
+  local highscore = 0
+  local sound = 1
   if data then
-    highscore=dget(0)
-    sound=dget(1)
-    if sound == 0 then sound = false else sound = true end
+    highscore=dget(0) or 0
+    sound=dget(1) or 1
   end
+  if sound == 0 then sound = false else sound = true end
   game.sound=sound
   game.highscore=highscore
 
