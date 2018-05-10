@@ -4,6 +4,7 @@ __lua__
 -- herbert
 -- by fresnik
 
+version = 2
 local dirs = {stop={x=0,y=0,spr={0,1,2,3}},
               nw={x=-1,y=-1,spr={4,20,36,52}},
               ne={x=1,y=-1,spr={6,22,38,54}},
@@ -21,7 +22,7 @@ function _init()
   menuitem(1, "instructions", show_instructions)
   menuitem(2, "toggle sound", toggle_sound)
   
-  data = cartdata("fresnik_herbert_1")
+  data = cartdata("fresnik_herbert_"..version)
   local highscore = 0
   local sound = 1
   if data then
@@ -88,6 +89,8 @@ function instructions_update()
 end
 
 function instructions_draw()
+  rectfill(0,120,128,128,0)
+  hcenter('version '..version, 121, 5)
   rectfill(14,16,114,112,1)
   rectfill(15,17,113,111,10)
   rectfill(16,18,112,110,1)
