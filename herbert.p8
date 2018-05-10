@@ -4,7 +4,7 @@ __lua__
 -- herbert
 -- by fresnik
 
-version = 2
+version = 3
 local dirs = {stop={x=0,y=0,spr={0,1,2,3}},
               nw={x=-1,y=-1,spr={4,20,36,52}},
               ne={x=1,y=-1,spr={6,22,38,54}},
@@ -374,9 +374,12 @@ function game_update()
   check_for_new_tiles()
 
   if game.check_water_collision and is_touching_water() then
+    sfx(2, 1)
     game.speed.current = game.speed.water
     game.life -= 1
     if game.life == -1 then gameover_init() end
+  else
+    sfx(-2, 1)
   end
 
   -- activate powerups we are in contact with
@@ -702,6 +705,7 @@ end
 -- game over
 
 function gameover_init()
+  sfx(-2, 1)
   game.tile.x-=23
   game.tile.y-=23
   for x=0,63 do
@@ -712,8 +716,8 @@ function gameover_init()
   game.cam={x=0,y=0}
   game.ending = true
   if game.score > game.highscore then
-    dset(0,game.highscore)
     game.highscore = game.score
+    dset(0,game.highscore)
   end
   game.update_func = gameover_update
   game.draw_func = gameover_draw
@@ -804,7 +808,6 @@ function restore_current_speeds()
 end
 
 function powerup_speed_bump_start()
-  printh('activating speed bump, currentspeed is '..tostr(game.speed.current)..', currentmaxspeed is '..tostr(game.speed.currentmax)..' and waterspeed is '..tostr(game.speed.water))
   store_current_speeds()
   game.speed.current = 0
   game.speed.currentmax = 1
@@ -835,13 +838,11 @@ function powerup_speed_bump_stop()
   game.speed_bump_count -= 1
   -- don't slow down until the last speed boost powerup has expired
   if game.speed_bump_count == 0 then
-    printh('deactivating speed bump, setting currentspeed to '..tostr(game.speed.oldcurrent)..', currentmaxspeed to '..tostr(game.speed.oldcurrentmax)..' and waterspeed to '..tostr(game.speed.oldwater))
     restore_current_speeds()
   end
 end
 
 function powerup_speed_boost_start()
-  printh('activating speed boost, currentspeed is '..tostr(game.speed.current)..', currentmaxspeed is '..tostr(game.speed.currentmax)..' and waterspeed is '..tostr(game.speed.water))
   store_current_speeds()
   game.speed.current = game.speed.max
   game.speed.currentmax = game.speed.max
@@ -872,7 +873,6 @@ function powerup_speed_boost_stop()
   game.speed_boost_count -= 1
   -- don't slow down until the last speed boost powerup has expired
   if game.speed_boost_count == 0 then
-    printh('deactivating speed boost, setting currentspeed to '..tostr(game.speed.oldcurrent)..', currentmaxspeed to '..tostr(game.speed.oldcurrentmax)..' and waterspeed to '..tostr(game.speed.oldwater))
     restore_current_speeds()
   end
 end
@@ -1218,3 +1218,7 @@ __label__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 
+__sfx__
+00020000010500105001050010500205002050030500305004050050500605007050090500b0500c0500e05010050120501405017050180501b0501f0502205025050280502c0502e0503005034050360503b050
+000b00001b550185001b5501f5001b550000001f550000001d550295001d5502f5001d5501050020550000001f550000001f550000001d550000001d550000001b5501b5501b5500000000000000000000000000
+000500041365010650136501665010600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
